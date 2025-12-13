@@ -9,6 +9,8 @@ from aiogram.fsm.storage.redis import RedisStorage
 from environs import Env
 from redis.asyncio import ConnectionPool, Redis
 
+from bot.handlers import router
+
 
 async def run() -> None:
     """Сборка и запуск пуллинга бота."""
@@ -24,5 +26,5 @@ async def run() -> None:
         default=DefaultBotProperties(parse_mode=ParseMode.HTML),
     )
     dp = Dispatcher(storage=RedisStorage(redis=redis))
-
+    dp.include_router(router)
     await dp.start_polling(bot)
