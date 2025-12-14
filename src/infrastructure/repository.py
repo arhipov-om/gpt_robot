@@ -38,3 +38,11 @@ class RedisMemoryRepository:
         """
         history = await self.get_chat_history(chat_id)
         history.add_ai_message(message)
+
+    async def clear_chat_history(self, chat_id: int) -> None:
+        """Очищает историю чата.
+
+        :param chat_id: ID чата.
+        """
+        history = await self.get_chat_history(chat_id)
+        history.clear()
