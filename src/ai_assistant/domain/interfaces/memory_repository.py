@@ -8,7 +8,7 @@ class IMemoryRepository(ABC):
 
     @abstractmethod
     async def get_chat_history(self, chat_id: int) -> list:
-        """Возвращает историю чата из Redis.
+        """Возвращает историю чата из репозитория.
 
         :param chat_id: ID чата.
         :return: Объект истории чата.
