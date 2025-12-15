@@ -1,4 +1,7 @@
+"""Модуль с интерфейсом репозитория истории сообщений."""
+
 from abc import ABC, abstractmethod
+
 
 class IMemoryRepository(ABC):
     """Интерфейс для работы с историей сообщений."""

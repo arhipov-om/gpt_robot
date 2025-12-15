@@ -1,5 +1,7 @@
-from config import Config
-from domain.interfaces.memory_repository import IMemoryRepository
+"""Модуль с фабрикой для создания LLM."""
+
+from ai_assistant.config import Config
+from ai_assistant.domain.interfaces.memory_repository import IMemoryRepository
 
 from .llm import LLM
 

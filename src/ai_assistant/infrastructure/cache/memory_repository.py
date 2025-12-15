@@ -4,8 +4,8 @@ import json
 
 from redis.asyncio import Redis
 
-from domain.interfaces.memory_repository import IMemoryRepository
-from domain.value_objects.chat_message import ChatMessage
+from ai_assistant.domain.interfaces.memory_repository import IMemoryRepository
+from ai_assistant.domain.value_objects.chat_message import ChatMessage
 
 
 class RedisMemoryRepository(IMemoryRepository):
@@ -35,14 +35,14 @@ class RedisMemoryRepository(IMemoryRepository):
         """Добавляет сообщение пользователя в историю."""
         await self._add_message(
             chat_id=chat_id,
-            message=ChatMessage(type="User", content=message),
+            message=ChatMessage(role="user", content=message),
         )
 
     async def add_ai_message(self, chat_id: int, message: str) -> None:
         """Добавляет сообщение от AI в историю."""
         await self._add_message(
             chat_id=chat_id,
-            message=ChatMessage(type="AI", content=message),
+            message=ChatMessage(role="assistant", content=message),
         )
 
     async def get_chat_history(self, chat_id: int) -> list[ChatMessage]:

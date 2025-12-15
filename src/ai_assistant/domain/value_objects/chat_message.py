@@ -1,9 +1,10 @@
 """Value object для сообщения чата с LLM."""
-from typing import TypedDict, Literal
+
+from typing import Literal, TypedDict
 
 
 class ChatMessage(TypedDict):
     """Типизированный словарь сообщения чата."""
 
-    type: Literal["User", "AI"]
+    role: Literal["user", "assistant"]
     content: str

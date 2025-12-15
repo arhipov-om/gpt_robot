@@ -3,8 +3,8 @@
 from redis.asyncio import Redis
 from redis.asyncio.connection import ConnectionPool
 
-from config import Config
-from infrastructure.cache import RedisMemoryRepository
+from ai_assistant.config import Config
+from ai_assistant.infrastructure.cache import RedisMemoryRepository
 
 
 def get_redis_connection_pool(config: Config) -> ConnectionPool:
@@ -21,4 +21,5 @@ def get_memory_repository(
     redis: Redis,
     history_limit: int,
 ) -> RedisMemoryRepository:
+    """Создает и возвращает экземпляр IMemoryRepository."""
     return RedisMemoryRepository(redis_client=redis, history_limit=history_limit)

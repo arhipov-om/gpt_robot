@@ -1,0 +1,1 @@
+"""Пакет с value objects."""

@@ -9,14 +9,14 @@ from aiogram.fsm.storage.redis import RedisStorage
 from environs import Env
 from redis.asyncio import Redis
 
-from config import Config, load_config
-from infrastructure.cache.factory import (
+from ai_assistant.config import Config, load_config
+from ai_assistant.infrastructure.cache.factory import (
     get_memory_repository,
     get_redis_client_with_connection_pool,
     get_redis_connection_pool,
 )
-from infrastructure.llm.factory import create_llm
-from infrastructure.llm.llm import LLM
+from ai_assistant.infrastructure.llm.factory import create_llm
+from ai_assistant.infrastructure.llm.llm import LLM
 
 from .handlers import router
 
@@ -46,12 +46,13 @@ async def run() -> None:
 
     pool = get_redis_connection_pool(config=config)
     redis = get_redis_client_with_connection_pool(pool=pool)
-    memory_repository = get_memory_repository(redis=redis, history_limit=7)
+    memory_repository = get_memory_repository(redis=redis, history_limit=15)
     llm = create_llm(config=config, memory_repository=memory_repository)
     bot = create_bot(config=config)
     dp = create_dispatcher(redis=redis, llm=llm)
 
     try:
+        await bot.delete_webhook(drop_pending_updates=True)
         await dp.start_polling(bot)
     finally:
         await redis.close()
