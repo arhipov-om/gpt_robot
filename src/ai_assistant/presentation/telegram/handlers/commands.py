@@ -4,7 +4,7 @@ from aiogram import F, Router
 from aiogram.filters import Command, CommandStart
 from aiogram.types import KeyboardButton, Message, ReplyKeyboardMarkup
 
-from infrastructure.repository import RedisMemoryRepository
+from infrastructure.cache import RedisMemoryRepository
 
 router = Router()
 
@@ -34,7 +34,7 @@ async def process_help(message: Message) -> None:
             keyboard=[
                 [
                     KeyboardButton(text=btn_text),
-                ]
+                ],
             ],
             resize_keyboard=True,
         ),

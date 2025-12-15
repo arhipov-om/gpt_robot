@@ -1,15 +1,18 @@
+"""Модуль для обработки текстовых сообщений."""
+
 import logging
 
 from aiogram import F, Router
 from aiogram.types import Message
 from langchain_core.language_models import BaseChatModel
 
+from infrastructure.cache import RedisMemoryRepository
 from infrastructure.llm import get_llm_text
-from infrastructure.repository import RedisMemoryRepository
 
 router = Router()
 
 logger = logging.getLogger("dialogs_router")
+
 
 @router.message(F.text)
 async def process_text_message(
