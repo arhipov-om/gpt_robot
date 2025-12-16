@@ -1,14 +1,9 @@
-"""Модуль для работы с хранилищем Redis асинхронно."""
-
 import json
 
 from redis.asyncio import Redis
 
-from ai_assistant.domain.interfaces.memory_repository import IMemoryRepository
-from ai_assistant.domain.value_objects.chat_message import ChatMessage
 
-
-class RedisMemoryRepository(IMemoryRepository):
+class RedisMemoryRepository:
     """Репозиторий для работы с памятью в Redis."""
 
     def __init__(self, redis_client: Redis, history_limit: int) -> None:
@@ -25,7 +20,7 @@ class RedisMemoryRepository(IMemoryRepository):
         """Формирует ключ для хранения истории чата."""
         return f"message_store:{chat_id}"
 
-    async def _add_message(self, chat_id: int, message: ChatMessage) -> None:
+    async def _add_message(self, chat_id: int, message: dict[str, str]) -> None:
         """Сохраняет сообщение в Redis."""
         key = self._key(chat_id=chat_id)
         await self.redis.lpush(key, json.dumps(message))
@@ -35,21 +30,21 @@ class RedisMemoryRepository(IMemoryRepository):
         """Добавляет сообщение пользователя в историю."""
         await self._add_message(
             chat_id=chat_id,
-            message=ChatMessage(role="user", content=message),
+            message={"role": "user", "content": message},
         )
 
     async def add_ai_message(self, chat_id: int, message: str) -> None:
         """Добавляет сообщение от AI в историю."""
         await self._add_message(
             chat_id=chat_id,
-            message=ChatMessage(role="assistant", content=message),
+            message={"role": "assistant", "content": message},
         )
 
-    async def get_chat_history(self, chat_id: int) -> list[ChatMessage]:
+    async def get_chat_history(self, chat_id: int) -> list[dict[str, str]]:
         """Возвращает историю сообщений чата в порядке их добавления."""
         key = self._key(chat_id=chat_id)
         raw_messages = await self.redis.lrange(key, 0, -1)
-        return [ChatMessage(**json.loads(item)) for item in reversed(raw_messages)]
+        return [json.loads(item) for item in reversed(raw_messages)]
 
     async def clear_chat_history(self, chat_id: int) -> None:
         """Очищает историю чата."""

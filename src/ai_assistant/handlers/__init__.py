@@ -1,5 +1,3 @@
-"""Пакет для обработчиков."""
-
 __all__ = ("router",)
 
 from aiogram import Router

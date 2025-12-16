@@ -1,4 +1,3 @@
-"""Модуль с конфигурацией приложения."""
 from dataclasses import dataclass
 
 from environs import Env

@@ -1,10 +1,8 @@
-"""Обработчики для команд."""
-
 from aiogram import F, Router
 from aiogram.filters import Command, CommandStart
 from aiogram.types import KeyboardButton, Message, ReplyKeyboardMarkup
 
-from ai_assistant.application.services import MemoryService
+from ai_assistant.memory import RedisMemoryRepository
 
 router = Router()
 
@@ -15,10 +13,10 @@ btn_text = "Новый запрос"
 @router.message(F.text == btn_text)
 async def process_start(
     message: Message,
-    memory_service: MemoryService,
+    memory_repository: RedisMemoryRepository,
 ) -> None:
     """Обработчик для команды /start и реплай кнопки. Очищает историю при вызове."""
-    await memory_service.clear(chat_id=message.chat.id)
+    await memory_repository.clear_chat_history(chat_id=message.chat.id)
     await message.answer("Начат новый диалог.\n\nПриветствую!")
     if message.text == btn_text:
         await message.delete()
